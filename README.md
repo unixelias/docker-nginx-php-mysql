@@ -81,10 +81,10 @@ This project use the following ports :
 
 | Server     | Port |
 |------------|------|
-| MySQL      | 8989 |
+| MySQL      | 3306 |
 | PHPMyAdmin | 8080 |
-| Nginx      | 8000 |
-| Nginx SSL  | 3000 |
+| Nginx      | 80   |
+| Nginx SSL  | 443  |
 
 ---
 
@@ -93,45 +93,47 @@ This project use the following ports :
 To install [Git](http://git-scm.com/book/en/v2/Getting-Started-Installing-Git), download it and install following the instructions : 
 
 ```sh
-git clone https://github.com/nanoninja/docker-nginx-php-mysql.git
+git clone https://github.com/unixelias/docker-web-dev.git
 ```
 
 Go to the project directory : 
 
 ```sh
-cd docker-nginx-php-mysql
+cd docker-web-dev
 ```
 
 ### Project tree
 
 ```sh
 .
-├── Makefile
 ├── README.md
-├── data
-│   └── db
-│       ├── dumps
-│       └── mysql
 ├── doc
-├── docker-compose.yml
-├── etc
-│   ├── nginx
-│   │   ├── default.conf
-│   │   └── default.template.conf
-│   ├── php
-│   │   └── php.ini
-│   └── ssl
-└── web
-    ├── app
-    │   ├── composer.json.dist
-    │   ├── phpunit.xml.dist
-    │   ├── src
-    │   │   └── Foo.php
-    │   └── test
-    │       ├── FooTest.php
-    │       └── bootstrap.php
-    └── public
-        └── index.php
+├── lemp-stack
+│   ├── Makefile
+│   ├── docker-compose.yml
+│   ├── db
+│   │   ├── dump
+│   │   ├── dumps
+│   │   ├── Dockerfile
+│   ├── etc
+│   │   ├── nginx
+│   │   │   ├── default.conf
+│   │   │   └── default.template.conf
+│   │   ├── php
+│   │   │   └── php.ini
+│   │   └── ssl
+│   └── web
+│       ├── app
+│       │   ├── composer.json.dist
+│       │   ├── phpunit.xml.dist
+│       │   ├── src
+│       │   │   └── Foo.php
+│       │   └── test
+│       │       ├── FooTest.php
+│       │       └── bootstrap.php
+│       └── public
+│           └── index.php
+
 ```
 
 ---
@@ -209,8 +211,8 @@ For a better integration of Docker to PHPStorm, use the [documentation](https://
 
 3. Open your favorite browser :
 
-    * [http://localhost:8000](http://localhost:8000/)
-    * [https://localhost:3000](https://localhost:3000/) ([HTTPS](#configure-nginx-with-ssl-certificates) not configured by default)
+    * [http://localhost](http://localhost/)
+    * [https://localhost](https://localhost/) ([HTTPS](#configure-nginx-with-ssl-certificates) not configured by default)
     * [http://localhost:8080](http://localhost:8080/) PHPMyAdmin (username: dev, password: dev)
 
 4. Stop and clear services
@@ -348,4 +350,6 @@ source .env && sudo docker exec -i $(sudo docker-compose ps -q mysqldb) mysql -u
 
 Any thought, feedback or (hopefully not!)
 
-Developed by [@letvinz](https://twitter.com/letvinz)
+Mantained by [@unixelias](https://twitter.com/unixelias) 
+
+Forked from [@letvinz](https://twitter.com/letvinz)

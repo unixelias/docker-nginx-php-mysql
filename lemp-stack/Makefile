@@ -3,7 +3,7 @@
 include .env
 
 # MySQL
-MYSQL_DUMPS_DIR=data/db/dumps
+MYSQL_DUMPS_DIR=db/dumps
 
 help:
 	@echo ""
@@ -30,7 +30,7 @@ apidoc:
 	@make resetOwner
 
 clean:
-	@rm -Rf data/db/mysql/*
+	@rm -Rf db/data/mysql/*
 	@rm -Rf $(MYSQL_DUMPS_DIR)/*
 	@rm -Rf web/app/vendor
 	@rm -Rf web/app/composer.lock
@@ -60,11 +60,11 @@ logs:
 
 mysql-dump:
 	@mkdir -p $(MYSQL_DUMPS_DIR)
-	@docker exec $(shell docker-compose ps -q mysqldb) mysqldump --all-databases -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" > $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
+	@docker exec $(shell docker-compose ps -q mysql) mysqldump --all-databases -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" > $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
 	@make resetOwner
 
 mysql-restore:
-	@docker exec -i $(shell docker-compose ps -q mysqldb) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
+	@docker exec -i $(shell docker-compose ps -q mysql) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
 
 test: code-sniff
 	@docker-compose exec -T php ./app/vendor/bin/phpunit --colors=always --configuration ./app/

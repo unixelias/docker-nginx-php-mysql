@@ -8,15 +8,15 @@ services:
             - "./web:/var/www/html"
             - "./etc/nginx/default.template.conf:/etc/nginx/conf.d/default.template"
         ports:
-            - "8000:80"
-            - "3000:443"
+            - "80:80"
+            - "443:443"
         environment:
             - NGINX_HOST=${NGINX_HOST}
         command: /bin/sh -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
         restart: always
         depends_on:
             - php
-            - mysqldb
+            - mysql
     php:
         image: nanoninja/php-fpm:${PHP_VERSION}
         restart: always
@@ -28,29 +28,37 @@ services:
         volumes:
             - "./web/app:/app"
         command: install
-    myadmin:
+
+    phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
+        hostname: phpmyadmin
+        volumes:
+            - phpmyadmin_data:/sessions
         ports:
-            - "8080:80"
+            - 8080:80
         environment:
             - PMA_ARBITRARY=1
+            - PMA_USER=${MYSQL_ROOT_USER}
+            - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
             - PMA_HOST=${MYSQL_HOST}
         restart: always
         depends_on:
-            - mysqldb
-    mysqldb:
-        image: mysql
+            - mysql
+    mysql:
+        build: ./db
+        hostname: ${MYSQL_HOST}
         container_name: ${MYSQL_HOST}
         restart: always
         env_file:
             - ".env"
         environment:
-            - MYSQL_DATABASE=${MYSQL_DATABASE}
             - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
             - MYSQL_USER=${MYSQL_USER}
             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
         ports:
-            - "8989:3306"
+            - "3306:3306"
         volumes:
-            - "./data/db/mysql:/var/lib/mysql"
+            - ./db/data/mysql:/var/lib/mysql
+            - ./db/dump:/docker-entrypoint-initdb.d
+volumes:
+  phpmyadmin_data:

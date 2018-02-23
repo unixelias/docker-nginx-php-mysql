@@ -3,7 +3,10 @@
 .DS_Store
 
 # Application
-web/app/composer.json
+lemp-stack/web/app/composer.json
+lemp-stack/web/app/vendor/
+lemp-stack/web/app/composer.lock
+lemp-stack/web/app/doc/*
 
 # PHPStorm
 .idea/**/workspace.xml
@@ -15,3 +18,10 @@ nbproject/
 /nbproject/
 /nbproject/private/
 /nbproject/private/private.properties
+
+# Code
+lemp-stack/db/dump/*
+lemp-stack/web/public/*
+
+# db
+lemp-stack/db/data/mysql/*
