@@ -26,7 +26,7 @@ init:
 	@$(shell cp -n $(shell pwd)/lemp-stack/web/app/composer.json.dist $(shell pwd)/lemp-stack/web/app/composer.json 2> /dev/null)
 
 apidoc:
-	@cd lemp-stack && docker-compose exec -T php ./app/vendor/bin/apigen generate app/src --destination app/doc
+	@cd lemp-stack && docker-compose exec -T php $(BACKEND_DIR)/vendor/bin/apigen generate app/src --destination app/doc
 	@make resetOwner
 
 clean:
@@ -40,10 +40,10 @@ clean:
 
 code-sniff:
 	@echo "Checking the standard code..."
-	@cd lemp-stack && docker-compose exec -T php ./app/vendor/bin/phpcs -v --standard=PSR2 app/src
+	@cd lemp-stack && docker-compose exec -T php $(BACKEND_DIR)/vendor/bin/phpcs -v --standard=PSR2 app/src
 
 composer-up:
-	@docker run --rm -v $(shell pwd)/web/app:/app composer update
+	@docker run --rm -v $(BACKEND_DIR):/app composer update
 
 docker-start: init
 	cd lemp-stack && docker-compose up -d
@@ -67,7 +67,7 @@ mysql-restore:
 	@docker exec -i $(shell cd lemp-stack && docker-compose ps -q mysql) mysql -u"$(MYSQL_ROOT_USER)" -p"$(MYSQL_ROOT_PASSWORD)" < $(MYSQL_DUMPS_DIR)/db.sql 2>/dev/null
 
 test: code-sniff
-	@cd lemp-stack && docker-compose exec -T php ./app/vendor/bin/phpunit --colors=always --configuration ./app/
+	@cd lemp-stack && docker-compose exec -T php $(BACKEND_DIR)/vendor/bin/phpunit --colors=always --configuration ./lemp-stack/web/app/
 	@make resetOwner
 
 resetOwner:
