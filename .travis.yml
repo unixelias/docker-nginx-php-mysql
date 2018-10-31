@@ -17,13 +17,11 @@ before_install:
 before_script:
   - sudo make docker-start
   - sleep 2m
-  - sudo service mysql stop
 
 script:
   - sudo make gen-certs
   - sudo make apidoc
   - sudo make test
-  - sudo service mysql stop
   - sudo make mysql-dump
   - sudo make mysql-restore
 
